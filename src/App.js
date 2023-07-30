@@ -7,13 +7,13 @@ function App() {
   const [productData, setProductData] = useState({});
   const [selectedSize, setSelectedSize] = useState(undefined);
   const [cartSize, setCartSize] = useState(0);
-  const cart = [];
+  const [cart, setCart] = useState([]);
 
   function addToCart(customerPurchase) {
     console.log(cartSize);
 
     if (cart.size === 0) {
-      cart.push(customerPurchase);
+      setCart((cart) => [...cart, customerPurchase]);
       setCartSize(cartSize + 1);
     } else {
       if (cart.some((purchase) => purchase[0] === customerPurchase[0])) {
@@ -21,7 +21,7 @@ function App() {
         item[1] = item[1] + 1;
         setCartSize(cartSize + 1);
       } else {
-        cart.push(customerPurchase);
+        setCart((cart) => [...cart, customerPurchase]);
         setCartSize(cartSize + 1);
       }
     }
@@ -44,7 +44,7 @@ function App() {
 
   return (
     <body className="w-screen px-0 md:px-56 py-4">
-      <Header productCount={cartSize} />
+      <Header productCount={cartSize} cart={cart} />
       <section>
         <div className="grid grid-cols-1 w-full lg:grid-cols-2 py-8">
           <div className="flex justify-center px-4 mb-4 lg:justify-end px-16">
@@ -172,7 +172,7 @@ function App() {
               <button
                 className="w-40 border-2 border-b-dg h-9 font-bold my-3 hover:text-[#FFF] hover:bg-black duration-[0.2ms]"
                 onClick={() => {
-                  addToCart([selectedSize, 1]);
+                  addToCart([selectedSize, 1, productData.title]);
                 }}
               >
                 ADD TO CART
